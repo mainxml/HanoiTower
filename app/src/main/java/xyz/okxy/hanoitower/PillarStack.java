@@ -7,11 +7,11 @@ import java.util.Stack;
  * @author zcp
  * @since 2018/9/7
  */
-public class MyStack<T> extends Stack<T> {
+public class PillarStack<T> extends Stack<T> {
 
     private String mName;
 
-    public MyStack(String name) {
+    public PillarStack(String name) {
         mName = name;
     }
 

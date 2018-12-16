@@ -1,24 +1,26 @@
 package xyz.okxy.hanoitower;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
 /**
- * 属性动画
+ * 属性动画-圆盘移动的所有动画在此
  * @author zcp
  * @since 2018/9/7
  */
 public class MyAnimator {
 
-    private Context mContext;
+    // 动画速度
     private int mDuration = 200;
-    private int mMoveCount = 1;
-    private float basePoint;
+    // 动画次数
+    private int mMoveCount = 0;
+    // 横向移动圆盘动画的距离
+    private float mLen;
 
-    public MyAnimator(Context context) {
-        mContext = context;
-        basePoint = mContext.getResources().getDisplayMetrics().widthPixels / 4f;
+    public MyAnimator(float len) {
+        mLen = len / 4;
     }
 
     public void aToB(View view) {
@@ -61,9 +63,9 @@ public class MyAnimator {
     /** 向上移动 */
     private void moveUp(View view) {
         ObjectAnimator moveUp = ObjectAnimator
-                .ofFloat(view, "translationY", -160f)
+                .ofFloat(view, "translationY", -320f)
                 .setDuration(mDuration);
-        moveUp.setStartDelay((mMoveCount++)*mDuration);
+        moveUp.setStartDelay((++mMoveCount)*mDuration);
         moveUp.start();
     }
 
@@ -72,7 +74,7 @@ public class MyAnimator {
         ObjectAnimator moveLeft = ObjectAnimator
                 .ofFloat(view, "translationY", 0f)
                 .setDuration(mDuration);
-        moveLeft.setStartDelay((mMoveCount++)*mDuration);
+        moveLeft.setStartDelay((++mMoveCount)*mDuration);
         moveLeft.start();
     }
 
@@ -81,26 +83,29 @@ public class MyAnimator {
         ObjectAnimator moveLeft = ObjectAnimator
                 .ofFloat(view, "translationX", 0)
                 .setDuration(mDuration);
-        moveLeft.setStartDelay((mMoveCount++)*mDuration);
+        moveLeft.setStartDelay((++mMoveCount)*mDuration);
         moveLeft.start();
     }
 
     /** 移动到 B */
     private void moveToB(View view) {
         ObjectAnimator moveRight = ObjectAnimator
-                .ofFloat(view, "translationX", basePoint)
+                .ofFloat(view, "translationX", mLen)
                 .setDuration(mDuration);
-        moveRight.setStartDelay((mMoveCount++)*mDuration);
+        moveRight.setStartDelay((++mMoveCount)*mDuration);
         moveRight.start();
     }
 
     /** 移动到 C */
     private void moveToC(View view) {
         ObjectAnimator moveRight = ObjectAnimator
-                .ofFloat(view, "translationX", 2*basePoint)
+                .ofFloat(view, "translationX", 2*mLen)
                 .setDuration(mDuration);
-        moveRight.setStartDelay((mMoveCount++)*mDuration);
+        moveRight.setStartDelay((++mMoveCount)*mDuration);
         moveRight.start();
     }
 
+    public void resetMoveCount() {
+        mMoveCount = 0;
+    }
 }

@@ -13,19 +13,26 @@ import android.view.View;
 import java.util.Random;
 
 /**
- * 用于动态生成的圆盘View
+ * PlateView
+ * 汉诺塔圆盘View
  * @author zcp
  * @since 2018/9/7
  */
-public class DiskView extends View {
+public class PlateView extends View {
 
-    private Context mContext;
+    // 横向移动圆盘动画的距离
+    private ThreePillarsView mParent;
     private Paint mPaint;
+    // 圆盘索引
     private int mIndex;
 
-    public DiskView(Context context, int index) {
+    public PlateView(Context context) {
         super(context);
-        mContext = context;
+    }
+
+    public PlateView(Context context, ThreePillarsView parent, int index) {
+        this(context);
+        mParent = parent;
         mPaint = new Paint();
         Random random = new Random();
         int color = Color.rgb(
@@ -38,26 +45,20 @@ public class DiskView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // 圆盘生成基点在屏幕宽度1/4处
-        float basePoint =  mContext.getResources()
-                .getDisplayMetrics().widthPixels / 4f;
-        /*
-         * 圆盘索引越大圆盘越宽
-         * 圆盘初始宽度
-         */
-        float left = basePoint - 60 + mIndex * 10;
-        float right = basePoint + 60 - mIndex * 10;
+        // 圆盘生成基点在三根柱子1/4处
+        float basePoint = mParent.getRealWidth() / 4f + mParent.getRealLeft()*2 + 2.5f;
 
-        /*
-         * 圆盘索引越大圆盘越高
-         * 圆盘初始高度
-        */
-        float top = getTop() + 355 - mIndex * 20;
-        float bottom = getTop() + 365 - mIndex * 20;
+        //圆盘初始宽度,索引越大圆盘越宽
+        float left = basePoint - 80 + mIndex * 10;
+        float right = basePoint + 80 - mIndex * 10;
+
+        // 圆盘初始高度,索引越大圆盘越高
+        float top = mParent.getRealBottom() - 45 - mIndex * 20;
+        float bottom = mParent.getRealBottom() - 35 - mIndex * 20;
 
         // 绘制
         canvas.drawRoundRect(left, top, right, bottom,
-                20f, 20f, mPaint);
+                         10f, 10f, mPaint);
     }
 
 }
