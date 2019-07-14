@@ -1,9 +1,6 @@
 package xyz.okxy.hanoitower;
 
 import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.content.Context;
-import android.view.View;
 
 /**
  * 属性动画-圆盘移动的所有动画在此
@@ -16,96 +13,92 @@ public class MyAnimator {
     private int mDuration = 200;
     // 动画次数
     private int mMoveCount = 0;
-    // 横向移动圆盘动画的距离
-    private float mLen;
+    // 柱子间距离
+    private float mPillarDistance;
 
-    public MyAnimator(float len) {
-        mLen = len / 4;
+    public MyAnimator(float ThreePillarWidth) {
+        mPillarDistance = ThreePillarWidth / 4;
     }
 
-    public void aToB(View view) {
-        moveUp(view);
-        moveToB(view);
-        moveDown(view);
+    public void aToB(PlateView plateView) {
+        moveUp(plateView);
+        moveToB(plateView);
+        moveDown(plateView);
     }
 
-    public void aToC(View view) {
-        moveUp(view);
-        moveToC(view);
-        moveDown(view);
+    public void aToC(PlateView plateView) {
+        moveUp(plateView);
+        moveToC(plateView);
+        moveDown(plateView);
     }
 
 
-    public void bToC(View view) {
-        moveUp(view);
-        moveToC(view);
-        moveDown(view);
+    public void bToC(PlateView plateView) {
+        moveUp(plateView);
+        moveToC(plateView);
+        moveDown(plateView);
     }
 
-    public void bToA(View view) {
-        moveUp(view);
-        moveToA(view);
-        moveDown(view);
+    public void bToA(PlateView plateView) {
+        moveUp(plateView);
+        moveToA(plateView);
+        moveDown(plateView);
     }
 
-    public void cToA(View view) {
-        moveUp(view);
-        moveToA(view);
-        moveDown(view);
+    public void cToA(PlateView plateView) {
+        moveUp(plateView);
+        moveToA(plateView);
+        moveDown(plateView);
     }
 
-    public void cToB(View view) {
-        moveUp(view);
-        moveToB(view);
-        moveDown(view);
+    public void cToB(PlateView plateView) {
+        moveUp(plateView);
+        moveToB(plateView);
+        moveDown(plateView);
     }
 
-    /** 向上移动 */
-    private void moveUp(View view) {
+    // 向上移动
+    private void moveUp(PlateView plateView) {
         ObjectAnimator moveUp = ObjectAnimator
-                .ofFloat(view, "translationY", -320f)
+                .ofFloat(plateView, "translationY", -(plateView.getRealTop()-50))
                 .setDuration(mDuration);
-        moveUp.setStartDelay((++mMoveCount)*mDuration);
+        moveUp.setStartDelay((++mMoveCount) * mDuration);
         moveUp.start();
     }
 
-    /** 向下移动 */
-    private void moveDown(View view) {
+    // 下移动
+    private void moveDown(PlateView plateView) {
         ObjectAnimator moveLeft = ObjectAnimator
-                .ofFloat(view, "translationY", 0f)
+                .ofFloat(plateView, "translationY", 0f)
                 .setDuration(mDuration);
-        moveLeft.setStartDelay((++mMoveCount)*mDuration);
+        moveLeft.setStartDelay(++mMoveCount * mDuration);
         moveLeft.start();
     }
 
-    /** 移动到 A */
-    private void moveToA(View view) {
+    // 移动到 A 柱
+    private void moveToA(PlateView plateView) {
         ObjectAnimator moveLeft = ObjectAnimator
-                .ofFloat(view, "translationX", 0)
+                .ofFloat(plateView, "translationX", 0f)
                 .setDuration(mDuration);
-        moveLeft.setStartDelay((++mMoveCount)*mDuration);
+        moveLeft.setStartDelay(++mMoveCount * mDuration);
         moveLeft.start();
     }
 
-    /** 移动到 B */
-    private void moveToB(View view) {
+    // 移动到 B 柱
+    private void moveToB(PlateView plateView) {
         ObjectAnimator moveRight = ObjectAnimator
-                .ofFloat(view, "translationX", mLen)
+                .ofFloat(plateView, "translationX", mPillarDistance)
                 .setDuration(mDuration);
-        moveRight.setStartDelay((++mMoveCount)*mDuration);
+        moveRight.setStartDelay(++mMoveCount * mDuration);
         moveRight.start();
     }
 
-    /** 移动到 C */
-    private void moveToC(View view) {
+    // 移动到 C 柱
+    private void moveToC(PlateView plateView) {
         ObjectAnimator moveRight = ObjectAnimator
-                .ofFloat(view, "translationX", 2*mLen)
+                .ofFloat(plateView, "translationX", 2 * mPillarDistance)
                 .setDuration(mDuration);
-        moveRight.setStartDelay((++mMoveCount)*mDuration);
+        moveRight.setStartDelay(++mMoveCount * mDuration);
         moveRight.start();
-    }
-
-    public void resetMoveCount() {
-        mMoveCount = 0;
     }
 }
