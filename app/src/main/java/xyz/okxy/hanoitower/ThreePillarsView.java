@@ -9,7 +9,6 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -194,8 +193,8 @@ public class ThreePillarsView extends View {
     /** 移动圆盘 */
     private void move(PillarStack<PlateView> from, PillarStack<PlateView> to) {
         PlateView popPlateView = from.pop();
-        String fromName = from.getStackName();
-        String toName = to.getStackName();
+        String fromName = from.getName();
+        String toName = to.getName();
 
         switch (fromName) {
             case PILLAR_A:

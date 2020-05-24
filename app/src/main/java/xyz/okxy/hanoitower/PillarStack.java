@@ -11,13 +11,13 @@ import java.util.Stack;
 public class PillarStack<T> extends Stack<T> {
 
     /** 柱子名 */
-    private String mStackName;
+    private String mName;
 
-    public PillarStack(String stackName) {
-        mStackName = stackName;
+    public PillarStack(String name) {
+        mName = name;
     }
 
-    public String getStackName() {
-        return mStackName;
+    public String getName() {
+        return mName;
     }
 }

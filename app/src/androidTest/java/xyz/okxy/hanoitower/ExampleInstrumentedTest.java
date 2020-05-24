@@ -1,8 +1,9 @@
 package xyz.okxy.hanoitower;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +20,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("xyz.okxy.hanoitower", appContext.getPackageName());
     }
 }
