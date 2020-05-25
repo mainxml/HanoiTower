@@ -1,4 +1,4 @@
-package xyz.okxy.hanoitower
+package com.mainxml.hanoitower
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -24,7 +24,7 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private val pillarA = PillarStack<DiskView>("A")
     private val pillarB = PillarStack<DiskView>("B")
     private val pillarC = PillarStack<DiskView>("C")
-    private var diskCount = 4
+    private var diskCount = 3
 
     private val animatorList = LinkedList<ValueAnimator>()
 
@@ -89,6 +89,7 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
         target.push(diskView)
     }
 
+    /** 动画移动圆盘  */
     private fun animationMove(child: View, source: String, target: String) {
         Log.i("move", "$source -> $target")
 
@@ -124,7 +125,8 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private fun down(child: View, target: String) {
         var offsetBottom = 0f
 
-        when(target) { // 根据目标柱子上盘子的数量算偏移
+        // 根据目标柱子上盘子的数量算下落偏移
+        when(target) {
             "A" -> offsetBottom = pillarA.count() * (child.height + dp2px(2))
             "B" -> offsetBottom = pillarB.count() * (child.height + dp2px(2))
             "C" -> offsetBottom = pillarC.count() * (child.height + dp2px(2))
@@ -146,10 +148,23 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
         animatorList.first.start()
     }
 
+    /**
+     * 汉诺塔的大小不用根据子View的大小来决定, 所以直接测量所有子View
+     */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // 汉诺塔的大小不用根据它的盘子的大小来决定,所以直接测量所有子View(DiskView)
+        // 宽规格大小
+        val widthSpecSize = MeasureSpec.getSize(widthMeasureSpec)
+        // 第一根柱子的中点
+        val pillarDistance = widthSpecSize / 4
+
+        var childWidth = pillarDistance
+
         children.forEach {
-            measureChild(it, widthMeasureSpec, heightMeasureSpec)
+            it.layoutParams.width = childWidth
+            val newWidthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY)
+            childWidth -= dp2px(8).toInt()
+
+            measureChild(it, newWidthMeasureSpec, heightMeasureSpec)
         }
 
         val defaultWidth = dp2px(300).toInt()
@@ -160,7 +175,7 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     /**
-     * 布局: 把全部子View排布到第一根柱子上
+     * 把全部子View排布到第一根柱子上
      */
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         // 获取此ViewGroup去掉Padding后的高度
@@ -179,7 +194,6 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
                     bottomStart.toInt() + child.measuredHeight
             )
             bottomStart -= child.measuredHeight + dp2px(2)
-            child.scaleX = 1 - 0.2f * i
         }
     }
 

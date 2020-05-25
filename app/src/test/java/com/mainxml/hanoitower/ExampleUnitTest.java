@@ -1,4 +1,4 @@
-package xyz.okxy.hanoitower;
+package com.mainxml.hanoitower;
 
 import org.junit.Test;
 

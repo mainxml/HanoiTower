@@ -3,45 +3,38 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <xyz.okxy.hanoitower.ThreePillarsView
-        android:id="@+id/three_pillars_view"
+    <com.mainxml.hanoitower.HanoiTower
+        android:id="@+id/hanoiTower"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp" />
+        android:layout_height="250dp"
+        android:layout_gravity="center"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
         <EditText
-            android:id="@+id/disk_count"
-            android:layout_width="0dp"
+            android:id="@+id/etView"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="numberSigned"
-            android:layout_marginRight="8dp"
-            android:hint="3（汉诺塔层数）"/>
+            android:inputType="number"
+            android:hint="层数(3)"
+            android:textAlignment="center"
+            tools:ignore="Autofill,HardcodedText" />
 
         <Button
-            android:id="@+id/start_button"
+            android:id="@+id/btnStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开始"/>
+            android:layout_marginStart="8dp"
+            android:text="开始"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 
 </FrameLayout>
-
-
-
-
-
-
-
-
