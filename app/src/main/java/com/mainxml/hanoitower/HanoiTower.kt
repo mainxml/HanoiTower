@@ -10,8 +10,9 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.animation.addListener
 import androidx.core.view.children
-import java.util.LinkedList
+import java.util.*
 
 /**
  * 汉诺塔视图
@@ -21,13 +22,16 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
                                            defStyleAttr: Int = 0, defStyleRes: Int = 0) :
         ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
 
+    /** 汉诺塔柱子A */
     private val pillarA = PillarStack<DiskView>("A")
+    /** 汉诺塔柱子B */
     private val pillarB = PillarStack<DiskView>("B")
+    /** 汉诺塔柱子C */
     private val pillarC = PillarStack<DiskView>("C")
+    /** 圆盘数量 */
     private var diskCount = 3
 
     private val animatorList = LinkedList<ValueAnimator>()
-
     private var paint: Paint
 
     init {
@@ -47,6 +51,9 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
      * 设置初始盘子数
      */
     fun setDiskCount(count: Int) {
+        if (pillarA.size == count){
+            return
+        }
         diskCount = count
 
         removeAllViews()
@@ -56,15 +63,30 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
         animatorList.forEach { it.cancel() }
         animatorList.clear()
 
+        val random = Random()
         for (i in 0 until diskCount) {
             val diskView = DiskView(context)
-            addView(diskView)
+
+            // 随机深色
+            var r: Int
+            var g: Int
+            var b: Int
+            do {
+                r = random.nextInt(256)
+                g = random.nextInt(256)
+                b = random.nextInt(256)
+            } while (r - g - b < 0)
+            val color = Color.rgb(r, g, b)
+
+            diskView.setColor(color)
             pillarA.add(diskView)
+            addView(diskView)
         }
 
         requestLayout()
     }
 
+    /** 开始 */
     fun start() {
         setDiskCount(diskCount)
         // 使用post让页面重建后再开始
@@ -84,15 +106,15 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     /** 移动圆盘  */
     private fun move(source: PillarStack<DiskView>, target: PillarStack<DiskView>) {
+        Log.i("HanoiTower", "${source.name} -> ${target.name}")
+
         val diskView = source.pop()
-        animationMove(diskView, source.name, target.name)
+        animationMove(diskView, target.name)
         target.push(diskView)
     }
 
     /** 动画移动圆盘  */
-    private fun animationMove(child: View, source: String, target: String) {
-        Log.i("move", "$source -> $target")
-
+    private fun animationMove(child: View, target: String) {
         up(child)
         leftOrRight(child, target[0].toInt() - 'A'.toInt())
         down(child, target)
@@ -101,24 +123,20 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private fun up(child: View) {
         val endValue = height / 3f
         val animator = ObjectAnimator.ofFloat(child, "Y", endValue)
-        animator.addUpdateListener {
-            if (it.animatedValue as Float == endValue) {
-                animatorList.remove(it)
-                animatorList.first.start()
-            }
-        }
+        animator.addListener(onEnd = {
+            animatorList.remove(it)
+            animatorList.first.start()
+        })
         animatorList.addLast(animator)
     }
 
     private fun leftOrRight(child: View, moveCount: Int) {
         val endValue = child.x + width / 4f * moveCount
         val animator = ObjectAnimator.ofFloat(child, "X", endValue)
-        animator.addUpdateListener {
-            if (it.animatedValue as Float == endValue) {
-                animatorList.remove(it)
-                animatorList.first.start()
-            }
-        }
+        animator.addListener(onEnd = {
+            animatorList.remove(it)
+            animatorList.first.start()
+        })
         animatorList.addLast(animator)
     }
 
@@ -134,14 +152,12 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
         val endValue = height - dp2px(34) - offsetBottom
         val animator = ObjectAnimator.ofFloat(child, "Y", endValue)
-        animator.addUpdateListener {
-            if (it.animatedValue as Float == endValue) {
-                animatorList.remove(it)
-                if (animatorList.size > 0) {
-                    animatorList.first.start()
-                }
+        animator.addListener(onEnd = {
+            animatorList.remove(it)
+            if (animatorList.size > 0){
+                animatorList.first.start()
             }
-        }
+        })
         animatorList.addLast(animator)
 
         // 开始

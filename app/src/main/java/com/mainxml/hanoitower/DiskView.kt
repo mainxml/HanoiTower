@@ -32,12 +32,16 @@ class DiskView : View {
     }
 
     private fun init() {
-        paint.color = color
         paint.apply {
             color = color
             style = Paint.Style.FILL
             isAntiAlias = true
         }
+    }
+
+    fun setColor(color: Int) {
+        paint.color = color
+        invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
