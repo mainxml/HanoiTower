@@ -56,12 +56,15 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
         }
         diskCount = count
 
-        removeAllViews()
+        for (i in 0 until animatorList.size) {
+            animatorList.first.cancel()
+        }
+        animatorList.clear()
+
         pillarA.clear()
         pillarB.clear()
         pillarC.clear()
-        animatorList.forEach { it.cancel() }
-        animatorList.clear()
+        removeAllViews()
 
         val random = Random()
         for (i in 0 until diskCount) {
@@ -80,6 +83,7 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
             diskView.setColor(color)
             pillarA.add(diskView)
+
             addView(diskView)
         }
 
@@ -90,9 +94,7 @@ class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet
     fun start() {
         setDiskCount(diskCount)
         // 使用post让页面重建后再开始
-        post {
-            hanoiAlg(diskCount, pillarA, pillarB, pillarC)
-        }
+        post { hanoiAlg(diskCount, pillarA, pillarB, pillarC) }
     }
 
     /** 汉诺塔算法  */
