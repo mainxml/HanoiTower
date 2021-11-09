@@ -11,7 +11,7 @@ import java.util.Stack;
 public class PillarStack<T> extends Stack<T> {
 
     /** 柱子名 */
-    private String mName;
+    private final String mName;
 
     public PillarStack(String name) {
         mName = name;

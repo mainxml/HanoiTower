@@ -18,9 +18,7 @@ import java.util.*
  * 汉诺塔视图
  * @author zcp 2020/5/23
  */
-class HanoiTower @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                           defStyleAttr: Int = 0, defStyleRes: Int = 0) :
-        ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
+class HanoiTower constructor(context: Context?, attrs: AttributeSet?) : ViewGroup(context, attrs) {
 
     /** 汉诺塔柱子A */
     private val pillarA = PillarStack<DiskView>("A")
